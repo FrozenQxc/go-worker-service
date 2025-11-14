@@ -1,0 +1,20 @@
+basePath: /
+host: localhost:8080
+info:
+  contact: {}
+  description: Тестовый сервис для Swagger демонстрации.
+  title: Worker Service API
+  version: "1.0"
+paths:
+  /test:
+    get:
+      description: Возвращает подтверждение работы сервиса
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Тестовый эндпоинт
+      tags:
+      - Test
+swagger: "2.0"

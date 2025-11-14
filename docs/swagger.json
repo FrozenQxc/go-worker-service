@@ -1,0 +1,30 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Тестовый сервис для Swagger демонстрации.",
+        "title": "Worker Service API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/test": {
+            "get": {
+                "description": "Возвращает подтверждение работы сервиса",
+                "tags": [
+                    "Test"
+                ],
+                "summary": "Тестовый эндпоинт",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
