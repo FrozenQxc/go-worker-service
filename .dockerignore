@@ -1,0 +1,10 @@
+# .dockerignore
+.git
+.gitignore
+
+tmp/
+*.exe
+
+Dockerfile
+docker-compose.yml
+.dockerignore
