@@ -1,0 +1,19 @@
+# Binaries
+/progqueue
+/go-worker-service
+*.exe
+*.out
+
+# Build artefacts
+/bin/
+/pkg/
+/dist/
+
+# Go modules
+/go.sum
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*~
