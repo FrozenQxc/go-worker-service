@@ -6,4 +6,6 @@ services:
     container_name: worker-service
     ports:
       - "8080:8080"
+
+    command: ["./service", "-N=5"]  
     restart: unless-stopped

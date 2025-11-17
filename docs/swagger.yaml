@@ -1,20 +1,107 @@
 basePath: /
+definitions:
+  api.createTaskRequest:
+    properties:
+      I:
+        description: Интервал
+        type: number
+      TTL:
+        type: number
+      d:
+        description: Число, которое добавляем
+        type: number
+      "n":
+        description: Сколько раз нужно добавить
+        type: integer
+      n1:
+        description: Стартовое число
+        type: number
+    type: object
+  service.Task:
+    properties:
+      I:
+        description: Интервал в секундах
+        type: number
+      TTL:
+        description: Время жизни в секундах
+        type: number
+      created_at:
+        type: string
+      current_iteration:
+        type: integer
+      d:
+        type: number
+      finished_at:
+        type: string
+      id:
+        type: string
+      "n":
+        type: integer
+      n1:
+        type: number
+      position:
+        description: Номер в очереди для сортировки
+        type: integer
+      result:
+        description: omitempty скроет поле, если оно пустое
+        items:
+          type: number
+        type: array
+      started_at:
+        type: string
+      status:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
-  description: Тестовый сервис для Swagger демонстрации.
+  description: Сервис для расчета арифметической прогрессии в фоновом режиме.
   title: Worker Service API
   version: "1.0"
 paths:
-  /test:
+  /tasks:
     get:
-      description: Возвращает подтверждение работы сервиса
+      description: Возвращает отсортированный список всех задач и их статусы.
+      produces:
+      - application/json
       responses:
         "200":
-          description: ok
+          description: Список задач
           schema:
-            type: string
-      summary: Тестовый эндпоинт
+            items:
+              $ref: '#/definitions/service.Task'
+            type: array
+      summary: Получить список всех задач
       tags:
-      - Test
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Принимает параметры для арифметической прогрессии и ставит задачу
+        в очередь.
+      parameters:
+      - description: Параметры задачи
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/api.createTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Возвращает ID созданной задачи
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Ошибка в теле запроса
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Создать новую задачу
+      tags:
+      - tasks
 swagger: "2.0"

@@ -15,20 +15,147 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/test": {
+        "/tasks": {
             "get": {
-                "description": "Возвращает подтверждение работы сервиса",
-                "tags": [
-                    "Test"
+                "description": "Возвращает отсортированный список всех задач и их статусы.",
+                "produces": [
+                    "application/json"
                 ],
-                "summary": "Тестовый эндпоинт",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Получить список всех задач",
                 "responses": {
                     "200": {
-                        "description": "ok",
+                        "description": "Список задач",
                         "schema": {
-                            "type": "string"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/service.Task"
+                            }
                         }
                     }
+                }
+            },
+            "post": {
+                "description": "Принимает параметры для арифметической прогрессии и ставит задачу в очередь.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Создать новую задачу",
+                "parameters": [
+                    {
+                        "description": "Параметры задачи",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.createTaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Возвращает ID созданной задачи",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в теле запроса",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.createTaskRequest": {
+            "type": "object",
+            "properties": {
+                "I": {
+                    "description": "Интервал",
+                    "type": "number"
+                },
+                "TTL": {
+                    "type": "number"
+                },
+                "d": {
+                    "description": "Число, которое добавляем",
+                    "type": "number"
+                },
+                "n": {
+                    "description": "Сколько раз нужно добавить",
+                    "type": "integer"
+                },
+                "n1": {
+                    "description": "Стартовое число",
+                    "type": "number"
+                }
+            }
+        },
+        "service.Task": {
+            "type": "object",
+            "properties": {
+                "I": {
+                    "description": "Интервал в секундах",
+                    "type": "number"
+                },
+                "TTL": {
+                    "description": "Время жизни в секундах",
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "current_iteration": {
+                    "type": "integer"
+                },
+                "d": {
+                    "type": "number"
+                },
+                "finished_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "n": {
+                    "type": "integer"
+                },
+                "n1": {
+                    "type": "number"
+                },
+                "position": {
+                    "description": "Номер в очереди для сортировки",
+                    "type": "integer"
+                },
+                "result": {
+                    "description": "omitempty скроет поле, если оно пустое",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "started_at": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         }
@@ -42,7 +169,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Worker Service API",
-	Description:      "Тестовый сервис для Swagger демонстрации.",
+	Description:      "Сервис для расчета арифметической прогрессии в фоновом режиме.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
